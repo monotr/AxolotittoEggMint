@@ -218,7 +218,6 @@ function App() {
             </button>
           </div>
         ))}
-        <a href='https://mumbai.polygonscan.com/address/0x6F9863E68C07387C7A01F3Aeb05A25808DcDDF5B' target={'_blank'} rel="noreferrer" className='smart-contract'>Smart Contract</a>
       </div>
     )
   }
@@ -330,7 +329,11 @@ function App() {
       <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
       <div className='mint-back'>
         <h1 className='title'>Axolotitto Egg - Presale</h1>
+        <h3 className='title'>{currentAccount ? currentAccount : ""}</h3>
         {currentAccount ? mintNftButton() : connectWalletButton()}
+        <div>
+          <a href='https://mumbai.polygonscan.com/address/0x6F9863E68C07387C7A01F3Aeb05A25808DcDDF5B' target={'_blank'} rel="noreferrer" className='smart-contract'>Smart Contract</a>
+        </div>
       </div>
 
       <span></span>
