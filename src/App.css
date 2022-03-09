@@ -42,6 +42,10 @@
     background: #03a9f4;
 }
 
+.sold-out-button {
+    background: #9c27b0;
+}
+
 .input-qty {
     padding: 15px;
     margin-right: 10px;

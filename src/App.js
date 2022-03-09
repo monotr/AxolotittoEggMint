@@ -156,7 +156,7 @@ function App() {
         console.log("Mining... please wait");
         await nftTxn.wait();
 
-        console.log(`Mined, see transaction: https://rinkeby.etherscan.io/tx/${nftTxn.hash}`);
+        console.log(`Mined, see transaction: https://mumbai.polygonscan.com/tx/${nftTxn.hash}`);
         window.location.reload();
 
       } else {
@@ -185,6 +185,15 @@ function App() {
         </button>
       )
     }
+
+    if (Math.round(totalMintable * 0.9) === totalMinted) { 
+      return (
+        <button className='cta-button sold-out-button'>
+          SOLD OUT!
+        </button>
+      )
+    }
+
     return (
       <div>
         <p className='title'>Price per Egg: {eggPrice} MATIC</p>
