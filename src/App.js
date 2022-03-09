@@ -16,6 +16,7 @@ function App() {
   const [eggsMeta, setEggsMeta] = useState([]);
   const [_mintedEggs, setMintedEggs] = useState([]);
   const [totalMinted, setTotalMinted] = useState(-1);
+  const [totalMintable, setTotalMintable] = useState(0);
 
   const rarities = ["COMMON", "UNCOMMON", "RARE", "ULTRA RARE"];
 
@@ -176,10 +177,18 @@ function App() {
   }
 
   const mintNftButton = () => {
+    if (!checkChain()) { 
+      addChangeNetwork();
+      return (
+        <button onClick={addChangeNetwork} className='cta-button change-network-button'>
+          Change to Mumbai Network
+        </button>
+      )
+    }
     return (
       <div>
         <p className='title'>Price per Egg: {eggPrice} MATIC</p>
-        <p className='title'>{totalMinted === -1 ? "" : totalMinted} / 2777 MINTED</p>
+        <p className='title'>{totalMinted === -1 ? "" : totalMinted} / {Math.round(totalMintable * 0.9)} MINTED</p>
         
         {totalMinted === -1 ? <></> : (_mintedEggs.length < 7 ? (
           <div>
@@ -212,7 +221,8 @@ function App() {
     try {
       const { ethereum } = window;
   
-      if (ethereum) {
+      let isChain = await checkChain();
+      if (ethereum && isChain) {
         let accounts = await ethereum.request({ method: 'eth_accounts' });
         if (accounts.length !== 0) {
           const account = accounts[0];
@@ -241,6 +251,8 @@ function App() {
           //
           let totalMinted = await nftContract.totalSupply();
           setTotalMinted(totalMinted.toNumber());
+          let totalMintable = await nftContract.mintLimit();
+          setTotalMintable(totalMintable.toNumber());
         }
       }
     }
@@ -250,7 +262,7 @@ function App() {
   }
   
   const mintedEggs = () => {
-    if (_mintedEggs.length === 0) return <></>;
+    if (_mintedEggs.length === 0 || !checkChain()) return <></>;
     const listItems = _mintedEggs.map((_egg) =>
       <Grid item xs={3}>
         <img src={eggsMeta[_egg]["image"]} className='eggImage'></img>
@@ -258,9 +270,12 @@ function App() {
       </Grid>
     );
     return (
-      <Grid container spacing={1}>
-        {listItems}
-      </Grid>
+      <div className='owned-back'>
+        <h1 className='title'>Owned Eggs</h1>
+        <Grid container spacing={1}>
+          {listItems}
+        </Grid>
+      </div>
     );
   }
 
@@ -272,7 +287,8 @@ function App() {
       let _network = await provider.getNetwork();
       //console.log(_network);
       const chainId = _network["chainId"];
-      //console.log(chainId); // 42
+      //console.log("chainId", chainId);
+      console.log(chainId === 80001 || chainId === 137);
       return chainId === 80001 || chainId === 137;
     }
     return false;
@@ -286,13 +302,21 @@ function App() {
   return (
     <div className='main-app'>
       <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
-      <h1 className='title'>Axolotitto Egg - Presale</h1>
-      <div>
-        {currentAccount ? (checkChain() ? mintNftButton() : addChangeNetwork()) : connectWalletButton()}
+      <div className='mint-back'>
+        <h1 className='title'>Axolotitto Egg - Presale</h1>
+        {currentAccount ? mintNftButton() : connectWalletButton()}
       </div>
-      <h2 className='title'>Owned Eggs</h2>
+
+      <span></span>
+      
       <div className='eggsGrid'>
         {currentAccount ? mintedEggs() : <></>}
+      </div>
+      
+      <span></span>
+      
+      <div>
+        <a href='https://docs.axolotto.xyz/first-steps...' target={'_blank'} className='smart-contract' >Help</a>
       </div>
 
       <img className='axolotitto' src="https://gateway.pinata.cloud/ipfs/QmPfmSnafs7kfVxNCRDpFz29o4ZMsZkeMbsUPNKyJavPmL"></img>

@@ -11,6 +11,11 @@
     color: white;
 }
 
+.mint-back {
+    width: 69%;
+    display: inline-block;
+}
+
 .cta-button {
     padding: 15px;
     border: none;
@@ -31,6 +36,10 @@
 
 .limit-nft-button {
     background: #f44336;
+}
+
+.change-network-button {
+    background: #03a9f4;
 }
 
 .input-qty {
@@ -62,4 +71,15 @@
 
 .smart-contract {
     color: white;
+}
+
+.owned-back {
+    background: #000000b6;
+    border-radius: 25px;
+    box-shadow: 6px 6px 8px #ffffff22;
+}
+
+span {
+    display: block;
+    height: 10px;
 }
