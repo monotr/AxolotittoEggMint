@@ -1,0 +1,65 @@
+.main-app {
+    text-align: center;
+    margin: 6%;
+}
+
+.logo {
+    width: 35%;
+}
+
+.title {
+    color: white;
+}
+
+.cta-button {
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    min-width: 250px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.connect-wallet-button {
+    background: #ff4081;
+}
+
+.mint-nft-button {
+    background: #ff9800;
+}
+
+.limit-nft-button {
+    background: #f44336;
+}
+
+.input-qty {
+    padding: 15px;
+    margin-right: 10px;
+    border-radius: 6px;
+}
+
+.eggsGrid {
+    display: -webkit-inline-box;
+    width: 69%;
+}
+
+.mintedEgg {
+    width: 33%;
+}
+
+.eggImage {
+    width: 100%;
+}
+
+.axolotitto {
+    position: absolute;
+    z-index: -1;
+    top: -7.5%;
+    left: 55%;
+    width: 35%;
+}
+
+.smart-contract {
+    color: white;
+}
