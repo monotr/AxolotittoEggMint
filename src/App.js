@@ -304,8 +304,7 @@ function App() {
     getMintedEggs();
   }, [])
 
-  const { _ethereum } = window;
-  if (!_ethereum) {
+  if (!window.ethereum) {
     return (
       <div className='main-app'>
         <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
