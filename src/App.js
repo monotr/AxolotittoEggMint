@@ -3,6 +3,7 @@ import './App.css';
 import contract from './contracts/AxolotittoEgg.json';
 import { ethers } from 'ethers';
 import Grid from '@mui/material/Grid';
+import {BrowserView, MobileView} from 'react-device-detect';
 
 const contractAddress = "0x6F9863E68C07387C7A01F3Aeb05A25808DcDDF5B";
 const abi = contract.abi;
@@ -309,7 +310,12 @@ function App() {
       <div className='main-app'>
         <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
         <div>
-          <a href='https://metamask.io/download/' target={'_blank'} rel='noreferrer' className='smart-contract' >Install MetaMask</a>
+          <BrowserView>
+              <a href='https://metamask.io/download/' target={'_blank'} rel='noreferrer' className='smart-contract' >Install MetaMask</a>
+          </BrowserView>
+          <MobileView>
+              <a href='https://trustwallet.com/deeplink/' target={'_blank'} rel='noreferrer' className='smart-contract' >Install TrustWallet</a>
+          </MobileView>
         </div>
       </div>
     )
