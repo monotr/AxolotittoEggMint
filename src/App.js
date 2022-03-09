@@ -4,8 +4,9 @@ import contract from './contracts/AxolotittoEgg.json';
 import { ethers } from 'ethers';
 import Grid from '@mui/material/Grid';
 import {BrowserView, MobileView} from 'react-device-detect';
+import { useAlert } from 'react-alert'
 
-const contractAddress = "0x6F9863E68C07387C7A01F3Aeb05A25808DcDDF5B";
+const contractAddress = "0x1b9634b141909b8903daFF7ebcd6927CD7a9331f";
 const abi = contract.abi;
 
 function App() {
@@ -19,7 +20,11 @@ function App() {
   const [totalMinted, setTotalMinted] = useState(-1);
   const [totalMintable, setTotalMintable] = useState(0);
 
+  const [isTransact, setisTransact] = useState(false);
+
   const rarities = ["COMMON", "UNCOMMON", "RARE", "ULTRA RARE"];
+
+  const alert = useAlert();
 
   document.body.style = 'background: black;';
 
@@ -28,6 +33,7 @@ function App() {
 
     if (!ethereum) {
       console.log("Make sure you have Metamask installed!");
+      alert.show('Make sure you have Metamask installed!');
       return;
     } else {
       console.log("Wallet exists! We're ready to go!")
@@ -50,6 +56,7 @@ function App() {
 
     if (!ethereum) {
       alert("Please install Metamask!");
+      alert.show('Please install Metamask!');
     }
 
     try {
@@ -135,11 +142,14 @@ function App() {
     }
   }
 
+  const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
   const mintNftHandler = async () => {
     try {
       const { ethereum } = window;
 
       if (ethereum) {
+        setisTransact(true);
         const provider = new ethers.providers.Web3Provider(ethereum);
         const signer = provider.getSigner();
         const nftContract = new ethers.Contract(contractAddress, abi, signer);
@@ -148,12 +158,17 @@ function App() {
         
         const weiValue = ethers.utils.parseUnits(eggPrice, 18);
         console.log("Initialize payment", weiValue.mul(num));
-        let nftTxn = await nftContract.mint(num, { value: weiValue.mul(num) });
+        alert.show('Confirm transaction...');
+        let nftTxn = await nftContract.mint(num, { value: weiValue.mul(num), gasLimit: num*300000 });
 
-        console.log("Mining... please wait");
+        console.log("Minting... please wait");
+        alert.show('Minting... please wait');
         await nftTxn.wait();
 
-        console.log(`Mined, see transaction: https://mumbai.polygonscan.com/tx/${nftTxn.hash}`);
+        console.log(`Minted, see transaction: https://mumbai.polygonscan.com/tx/${nftTxn.hash}`);
+        alert.show(`Minting complete!`, {type: 'success'});
+        await sleep(5000);
+        setisTransact(false);
         window.location.reload();
 
       } else {
@@ -162,6 +177,8 @@ function App() {
 
     } catch (err) {
       console.log(err);
+      alert.show('Error ' + err['message'], {type: 'error'});
+      setisTransact(false);
     }
   }
 
@@ -191,6 +208,14 @@ function App() {
       )
     }
 
+    if (isTransact) { 
+      return (
+        <button className='cta-button transact-button'>
+          wait for transaction...
+        </button>
+      )
+    }
+
     return (
       <div>
         <p className='title'>Price per Egg: {eggPrice} MATIC</p>
@@ -201,14 +226,14 @@ function App() {
             <input
               type="number"
               min={1}
-              max={7}
+              max={7 - _mintedEggs.length}
               step={1}
               value={num}
               onChange={e => setNum(e.target.value)}
               className="input-qty"
             />
             <button onClick={mintNftHandler} className='cta-button mint-nft-button'>
-              Mint Egg NFT
+              Mint {num} Egg(s) - {num*eggPrice} MATIC
             </button>
           </div>
         ) : (
@@ -332,7 +357,7 @@ function App() {
         <h3 className='title'>{currentAccount ? currentAccount : ""}</h3>
         {currentAccount ? mintNftButton() : connectWalletButton()}
         <div>
-          <a href='https://mumbai.polygonscan.com/address/0x6F9863E68C07387C7A01F3Aeb05A25808DcDDF5B' target={'_blank'} rel="noreferrer" className='smart-contract'>Smart Contract</a>
+          <a href={'https://mumbai.polygonscan.com/address/' + contractAddress} target={'_blank'} rel="noreferrer" className='smart-contract'>Smart Contract</a>
         </div>
       </div>
 

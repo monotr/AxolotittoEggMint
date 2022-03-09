@@ -46,6 +46,10 @@
     background: #9c27b0;
 }
 
+.transact-button {
+    background-color: #616161;
+}
+
 .input-qty {
     padding: 15px;
     margin-right: 10px;
