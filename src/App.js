@@ -61,10 +61,6 @@ function App() {
     }
   }
 
-  window.ethereum.on('accountsChanged', function (accounts) {
-    window.location.reload();
-  })
-
   const addChangeNetwork = () => {
     /*window.ethereum.request({
         method: "wallet_addEthereumChain",
@@ -221,7 +217,7 @@ function App() {
             </button>
           </div>
         ))}
-        <a href='https://mumbai.polygonscan.com/address/0x6F9863E68C07387C7A01F3Aeb05A25808DcDDF5B' target={'_blank'} className='smart-contract'>Smart Contract</a>
+        <a href='https://mumbai.polygonscan.com/address/0x6F9863E68C07387C7A01F3Aeb05A25808DcDDF5B' target={'_blank'} rel="noreferrer" className='smart-contract'>Smart Contract</a>
       </div>
     )
   }
@@ -274,7 +270,7 @@ function App() {
     if (_mintedEggs.length === 0 || !checkChain()) return <></>;
     const listItems = _mintedEggs.map((_egg) =>
       <Grid item xs={3}>
-        <img src={eggsMeta[_egg]["image"]} className='eggImage'></img>
+        <img src={eggsMeta[_egg]["image"]} alt='eggImage' className='eggImage'></img>
         <p className='title'>{rarities[_egg]}</p>
       </Grid>
     );
@@ -308,6 +304,22 @@ function App() {
     getMintedEggs();
   }, [])
 
+  const { _ethereum } = window;
+  if (!_ethereum) {
+    return (
+      <div className='main-app'>
+        <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
+        <div>
+          <a href='https://metamask.io/download/' target={'_blank'} rel='noreferrer' className='smart-contract' >Install MetaMask</a>
+        </div>
+      </div>
+    )
+  }
+
+  window.ethereum.on('accountsChanged', function (accounts) {
+    window.location.reload();
+  })
+
   return (
     <div className='main-app'>
       <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
@@ -325,7 +337,7 @@ function App() {
       <span></span>
       
       <div>
-        <a href='https://docs.axolotto.xyz/first-steps...' target={'_blank'} className='smart-contract' >Help</a>
+        <a href='https://docs.axolotto.xyz/first-steps...' target={'_blank'} rel='noreferrer' className='smart-contract' >Help</a>
       </div>
 
       <img className='axolotitto' src="https://gateway.pinata.cloud/ipfs/QmPfmSnafs7kfVxNCRDpFz29o4ZMsZkeMbsUPNKyJavPmL"></img>
