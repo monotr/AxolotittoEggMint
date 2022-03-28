@@ -6,13 +6,14 @@ import Grid from '@mui/material/Grid';
 import {BrowserView, MobileView} from 'react-device-detect';
 import { useAlert } from 'react-alert'
 
-const contractAddress = "0x1b9634b141909b8903daFF7ebcd6927CD7a9331f";
+const contractAddress = "0x3e1a843d39f3ff75556096b75672216e132cc004";
 const abi = contract.abi;
 
 function App() {
 
   const [currentAccount, setCurrentAccount] = useState(null);
 
+  const [isPaused, setIsPaused] = useState(false);
   const [num, setNum] = useState(1);
   const [eggPrice, setEggPrice] = useState(1);
   const [eggsMeta, setEggsMeta] = useState([]);
@@ -70,7 +71,7 @@ function App() {
   }
 
   const addChangeNetwork = () => {
-    /*window.ethereum.request({
+    window.ethereum.request({
         method: "wallet_addEthereumChain",
         params: [{
             chainId: "0x89",
@@ -83,8 +84,8 @@ function App() {
             },
             blockExplorerUrls: ["https://polygonscan.com/"]
         }]
-    });*/
-    window.ethereum.request({
+    });
+    /*window.ethereum.request({
         method: "wallet_addEthereumChain",
         params: [{
             chainId: "0x13881",
@@ -97,7 +98,7 @@ function App() {
             },
             blockExplorerUrls: ["https://mumbai.polygonscan.com/"]
         }]
-    });
+    });*/
   }
 
   const getEggMeta = async () => {
@@ -105,13 +106,14 @@ function App() {
       const { ethereum } = window;
   
       if (ethereum) {
-        const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mumbai/ws";
+        const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mainnet/ws";
         const provider = new ethers.providers.WebSocketProvider(NODE_URL);
         let nftContract = new ethers.Contract(contractAddress, abi, provider);
   
         addChangeNetwork();
         let eggPrice = await nftContract.getMintPrice();
-        eggPrice = ethers.utils.formatEther(eggPrice.toNumber());
+        console.log("eggPrice", eggPrice);
+        eggPrice = ethers.utils.formatEther(eggPrice);
         console.log(eggPrice);
         setEggPrice(eggPrice);
 
@@ -165,7 +167,7 @@ function App() {
         alert.show('Minting... please wait');
         await nftTxn.wait();
 
-        console.log(`Minted, see transaction: https://mumbai.polygonscan.com/tx/${nftTxn.hash}`);
+        console.log(`Minted, see transaction: https://polygonscan.com/tx/${nftTxn.hash}`);
         alert.show(`Minting complete!`, {type: 'success'});
         await sleep(5000);
         setisTransact(false);
@@ -200,6 +202,14 @@ function App() {
       )
     }
 
+    if (isPaused) { 
+      return (
+        <button className='cta-button paused-button'>
+          Minting is Paused
+        </button>
+      )
+    }
+
     if (Math.round(totalMintable * 0.9) === totalMinted) { 
       return (
         <button className='cta-button sold-out-button'>
@@ -218,7 +228,9 @@ function App() {
 
     return (
       <div>
-        <p className='title'>Price per Egg: {eggPrice} MATIC</p>
+        <div className='price-a'>
+          <p className='title'>Price per Egg: {eggPrice} MATIC</p><img src='https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png' className='polygon-icon'></img>
+        </div>
         <p className='title'>{totalMinted === -1 ? "" : totalMinted} / {Math.round(totalMintable * 0.9)} MINTED</p>
         
         {totalMinted === -1 ? <></> : (_mintedEggs.length < 7 ? (
@@ -283,6 +295,10 @@ function App() {
           setTotalMinted(totalMinted.toNumber());
           let totalMintable = await nftContract.mintLimit();
           setTotalMintable(totalMintable.toNumber());
+
+          //
+          let _isPaused = await nftContract.paused();
+          setIsPaused(_isPaused)
         }
       }
     }
@@ -301,7 +317,7 @@ function App() {
     );
     return (
       <div className='owned-back'>
-        <h1 className='title'>Owned Eggs</h1>
+        <h1 className='title'>Minted {_mintedEggs.length} Eggs</h1>
         <Grid container spacing={1}>
           {listItems}
         </Grid>
@@ -353,11 +369,11 @@ function App() {
     <div className='main-app'>
       <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
       <div className='mint-back'>
-        <h1 className='title'>Axolotitto Egg - Presale</h1>
+        <h1 className='title'>Axolotitto Egg🥚 - Presale</h1>
         <h3 className='title'>{currentAccount ? currentAccount : ""}</h3>
         {currentAccount ? mintNftButton() : connectWalletButton()}
         <div>
-          <a href={'https://mumbai.polygonscan.com/address/' + contractAddress} target={'_blank'} rel="noreferrer" className='smart-contract'>Smart Contract</a>
+          <a href={'https://polygonscan.com/address/' + contractAddress} target={'_blank'} rel="noreferrer" className='smart-contract'>📘Smart Contract</a>
         </div>
       </div>
 
@@ -370,7 +386,7 @@ function App() {
       <span></span>
       
       <div>
-        <a href='https://docs.axolotto.xyz/first-steps...' target={'_blank'} rel='noreferrer' className='smart-contract' >Help</a>
+        <a href='https://docs.axolotto.xyz/first-steps...' target={'_blank'} rel='noreferrer' className='smart-contract' >❓Help</a>
       </div>
 
       <img className='axolotitto' src="https://gateway.pinata.cloud/ipfs/QmPfmSnafs7kfVxNCRDpFz29o4ZMsZkeMbsUPNKyJavPmL"></img>

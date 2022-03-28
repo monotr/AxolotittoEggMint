@@ -46,8 +46,24 @@
     background: #9c27b0;
 }
 
+.paused-button {
+    background: #00897b;
+}
+
 .transact-button {
     background-color: #616161;
+}
+
+.price-a {
+    display: -webkit-inline-box;
+}
+
+.polygon-icon {
+    display: block;
+    width: 25px;
+    height: 25px;
+    margin-top: 1em;
+    border-radius: 25px;
 }
 
 .input-qty {
