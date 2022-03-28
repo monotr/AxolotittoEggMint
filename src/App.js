@@ -9,10 +9,14 @@ import { useAlert } from 'react-alert'
 const contractAddress = "0x3e1a843d39f3ff75556096b75672216e132cc004";
 const abi = contract.abi;
 
+const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mainnet/ws";
+//const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mumbai/ws";
+
 function App() {
 
   const [currentAccount, setCurrentAccount] = useState(null);
 
+  const [isLive, setIsLive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [num, setNum] = useState(1);
   const [eggPrice, setEggPrice] = useState(1);
@@ -106,7 +110,6 @@ function App() {
       const { ethereum } = window;
   
       if (ethereum) {
-        const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mainnet/ws";
         const provider = new ethers.providers.WebSocketProvider(NODE_URL);
         let nftContract = new ethers.Contract(contractAddress, abi, provider);
   
@@ -120,7 +123,13 @@ function App() {
         //
         if (eggsMeta.length === 0) {
           let _eggsMeta = [];
-          for (let i = 0; i < 4; i++) {
+          _eggsMeta = [
+            "https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/Egg_0_COMMON.gif?alt=media&token=d239a404-88da-4eb7-a05e-ad1da568d8fd",
+            "https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/Egg_1_UNCOMMON.gif?alt=media&token=477a4768-0365-4dd8-a0fa-3cddaaf74b64",
+            "https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/Egg_2_RARE.gif?alt=media&token=0bf2b5f9-9081-44ae-9f82-334d00303f5b",
+            "https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/Egg_3_ULTRA%20RARE.gif?alt=media&token=eee40cc5-05db-4c9d-b744-ad3e3118b513"
+          ];
+          /*for (let i = 0; i < 4; i++) {
              let _uri = await nftContract.uris(i);
              console.log(_uri);
              fetch(_uri)
@@ -133,7 +142,7 @@ function App() {
                       console.log(error);
                   }
               )
-          }
+          }*/
           console.log(_eggsMeta);
           setEggsMeta(_eggsMeta);
         }
@@ -210,6 +219,14 @@ function App() {
       )
     }
 
+    if (!isLive) { 
+      return (
+        <button className='cta-button paused-button'>
+          Presale not ready yet
+        </button>
+      )
+    }
+
     if (Math.round(totalMintable * 0.9) === totalMinted) { 
       return (
         <button className='cta-button sold-out-button'>
@@ -270,8 +287,7 @@ function App() {
           const account = accounts[0];
 
           await getEggMeta();
-          
-          const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mumbai/ws";
+
           let provider = new ethers.providers.WebSocketProvider(NODE_URL);
           let nftContract = new ethers.Contract(contractAddress, abi, provider);
           
@@ -299,6 +315,10 @@ function App() {
           //
           let _isPaused = await nftContract.paused();
           setIsPaused(_isPaused)
+
+          //
+          let _isLive = await nftContract.isSaleLive();
+          setIsLive(_isLive)
         }
       }
     }
@@ -311,7 +331,7 @@ function App() {
     if (_mintedEggs.length === 0 || !checkChain()) return <></>;
     const listItems = _mintedEggs.map((_egg) =>
       <Grid item xs={3}>
-        <img src={eggsMeta[_egg]["image"]} alt='eggImage' className='eggImage'></img>
+        <img src={eggsMeta[_egg]} alt='eggImage' className='eggImage'></img>
         <p className='title'>{rarities[_egg]}</p>
       </Grid>
     );
@@ -389,7 +409,7 @@ function App() {
         <a href='https://docs.axolotto.xyz/first-steps...' target={'_blank'} rel='noreferrer' className='smart-contract' >❓Help</a>
       </div>
 
-      <img className='axolotitto' src="https://gateway.pinata.cloud/ipfs/QmPfmSnafs7kfVxNCRDpFz29o4ZMsZkeMbsUPNKyJavPmL"></img>
+      <img className='axolotitto' src="https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/peace.png?alt=media&token=06b83a5b-2330-40ea-8bd1-82dafb0195ea"></img>
     </div>
   )
 }
