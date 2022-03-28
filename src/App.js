@@ -115,9 +115,9 @@ function App() {
   
         addChangeNetwork();
         let eggPrice = await nftContract.getMintPrice();
-        console.log("eggPrice", eggPrice);
+        //console.log("eggPrice", eggPrice);
         eggPrice = ethers.utils.formatEther(eggPrice);
-        console.log(eggPrice);
+        //console.log(eggPrice);
         setEggPrice(eggPrice);
 
         //
@@ -143,7 +143,7 @@ function App() {
                   }
               )
           }*/
-          console.log(_eggsMeta);
+          //console.log(_eggsMeta);
           setEggsMeta(_eggsMeta);
         }
       }
@@ -295,14 +295,14 @@ function App() {
 
           let userBalance = await nftContract.balanceOf(account);
           userBalance = userBalance.toNumber();
-          console.log("userBalance", userBalance);
+          //console.log("userBalance", userBalance);
           let eggs = [];
           for (let i = 0; i < userBalance; i++) {
             eggs[i] = await nftContract.tokenOfOwnerByIndex(account, i);
             eggs[i] = eggs[i].toNumber();
             eggs[i] = await nftContract.egg_rarity(eggs[i]);
           }
-          console.log(eggs);
+          //console.log(eggs);
 
           setMintedEggs(eggs)
 
@@ -354,7 +354,7 @@ function App() {
       //console.log(_network);
       const chainId = _network["chainId"];
       //console.log("chainId", chainId);
-      console.log(chainId === 80001 || chainId === 137);
+      //console.log(chainId === 80001 || chainId === 137);
       return chainId === 80001 || chainId === 137;
     }
     return false;
