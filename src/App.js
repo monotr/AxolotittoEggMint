@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import {BrowserView, MobileView} from 'react-device-detect';
 import { useAlert } from 'react-alert'
 
-const contractAddress = "0x3e1a843d39f3ff75556096b75672216e132cc004";
+const contractAddress = "0x6394f90c3b24004d538975cbd34dc543edb22291";
 const abi = contract.abi;
 
 const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mainnet/ws";
@@ -22,6 +22,7 @@ function App() {
   const [eggPrice, setEggPrice] = useState(1);
   const [eggsMeta, setEggsMeta] = useState([]);
   const [_mintedEggs, setMintedEggs] = useState([]);
+  const [claimable, setClaimable] = useState(0);
   const [totalMinted, setTotalMinted] = useState(-1);
   const [totalMintable, setTotalMintable] = useState(0);
 
@@ -193,6 +194,42 @@ function App() {
     }
   }
 
+  const claimNftHandler = async () => {
+    try {
+      const { ethereum } = window;
+
+      if (ethereum) {
+        setisTransact(true);
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const nftContract = new ethers.Contract(contractAddress, abi, signer);
+
+        addChangeNetwork();
+        
+        alert.show('Confirm transaction...');
+        let nftTxn = await nftContract.claimAirdrop({ value: 0, gasLimit: num*300000 });
+
+        console.log("Minting... please wait");
+        alert.show('Minting... please wait');
+        await nftTxn.wait();
+
+        console.log(`Minted, see transaction: https://polygonscan.com/tx/${nftTxn.hash}`);
+        alert.show(`Minting complete!`, {type: 'success'});
+        await sleep(5000);
+        setisTransact(false);
+        window.location.reload();
+
+      } else {
+        console.log("Ethereum object does not exist");
+      }
+
+    } catch (err) {
+      console.log(err);
+      alert.show('Error ' + err['message'], {type: 'error'});
+      setisTransact(false);
+    }
+  }
+
   const connectWalletButton = () => {
     return (
       <button onClick={connectWalletHandler} className='cta-button connect-wallet-button'>
@@ -262,16 +299,37 @@ function App() {
               className="input-qty"
             />
             <button onClick={mintNftHandler} className='cta-button mint-nft-button'>
-              Mint {num} Egg(s) - {num*eggPrice} MATIC
+              🥚Mint {num} Egg(s) - {num*eggPrice} MATIC
             </button>
           </div>
         ) : (
           <div>
             <button className='cta-button limit-nft-button'>
-              LIMIT 7 EGGS PER WALLET
+              ❗LIMIT 7 EGGS PER WALLET
             </button>
           </div>
         ))}
+      </div>
+    )
+  }
+
+  const giveawayNftButton = () => {
+    if (!checkChain()) { 
+      addChangeNetwork();
+      return (
+        <></>
+      )
+    }
+    
+    return (
+      <div>
+        {claimable === 0 ? <div></div> : (
+          <div>
+            <button onClick={claimNftHandler} className='cta-button claim-nft-button'>
+              🎉Claim {claimable} Egg(s)
+            </button>
+          </div>)
+        }
       </div>
     )
   }
@@ -303,8 +361,13 @@ function App() {
             eggs[i] = await nftContract.egg_rarity(eggs[i]);
           }
           //console.log(eggs);
-
           setMintedEggs(eggs)
+          
+          // giveaway claimable
+          let claimable = await nftContract.airdrop_whitelist(account);
+          claimable = claimable.toNumber();
+          setClaimable(claimable)
+          //console.log("claimable", claimable);
 
           //
           let totalMinted = await nftContract.totalSupply();
@@ -390,17 +453,26 @@ function App() {
       <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
       <div className='mint-back'>
         <h1 className='title'>Axolotitto Egg🥚 - Presale</h1>
-        <h3 className='title'>{currentAccount ? currentAccount : ""}</h3>
         {currentAccount ? mintNftButton() : connectWalletButton()}
-        <div>
-          <a href={'https://polygonscan.com/address/' + contractAddress} target={'_blank'} rel="noreferrer" className='smart-contract'>📘Smart Contract</a>
-        </div>
+        {isLive ? (
+          <div>
+            <h3 className='title'>{currentAccount ? currentAccount : ""}</h3>
+            <div>
+              {giveawayNftButton()}
+            </div>
+            <div>
+              <a href={'https://polygonscan.com/address/' + contractAddress} target={'_blank'} rel="noreferrer" className='smart-contract'>📘Smart Contract</a>
+            </div>
+          </div>
+        ) : (
+          <div></div>
+        )}
       </div>
 
       <span></span>
       
       <div className='eggsGrid'>
-        {currentAccount ? mintedEggs() : <></>}
+        {isLive && currentAccount ? mintedEggs() : <></>}
       </div>
       
       <span></span>

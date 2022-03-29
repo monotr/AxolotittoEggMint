@@ -225,24 +225,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_addr",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_qty",
-				"type": "uint256"
-			}
-		],
-		"name": "addToAirdropWhitelist",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"inputs": [],
 		"name": "airdropMax",
 		"outputs": [
@@ -621,6 +603,24 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address[]",
+				"name": "_addrs",
+				"type": "address[]"
+			},
+			{
+				"internalType": "uint256[]",
+				"name": "_qtys",
+				"type": "uint256[]"
+			}
+		],
+		"name": "multiAddToAirdropWhitelist",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
