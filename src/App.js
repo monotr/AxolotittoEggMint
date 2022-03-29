@@ -207,7 +207,7 @@ function App() {
         addChangeNetwork();
         
         alert.show('Confirm transaction...');
-        let nftTxn = await nftContract.claimAirdrop({ value: 0, gasLimit: num*300000 });
+        let nftTxn = await nftContract.claimAirdrop({ value: 0, gasLimit: num*2000000 });
 
         console.log("Minting... please wait");
         alert.show('Minting... please wait');
