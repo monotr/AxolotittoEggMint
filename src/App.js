@@ -264,7 +264,7 @@ function App() {
       )
     }
 
-    if (Math.round(totalMintable * 0.9) === totalMinted) { 
+    if (Math.round(totalMintable * 0.95) === totalMinted) { 
       return (
         <button className='cta-button sold-out-button'>
           SOLD OUT!
@@ -285,7 +285,7 @@ function App() {
         <div className='price-a'>
           <p className='title'>Price per Egg: {eggPrice} MATIC</p><img src='https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png' className='polygon-icon'></img>
         </div>
-        <p className='title'>{totalMinted === -1 ? "" : totalMinted} / {Math.round(totalMintable * 0.9)} MINTED</p>
+        <p className='title'>{totalMinted === -1 ? "" : totalMinted} / {Math.round(totalMintable)} MINTED</p>
         
         {totalMinted === -1 ? <></> : (_mintedEggs.length < 7 ? (
           <div>
@@ -366,11 +366,12 @@ function App() {
           // giveaway claimable
           let claimable = await nftContract.airdrop_whitelist(account);
           claimable = claimable.toNumber();
-          setClaimable(claimable)
+          setClaimable(claimable);
           //console.log("claimable", claimable);
 
           //
-          let totalMinted = await nftContract.totalSupply();
+          let totalMinted = await nftContract.boughtCount();
+          //console.log("totalMinted", totalMinted);
           setTotalMinted(totalMinted.toNumber());
           let totalMintable = await nftContract.mintLimit();
           setTotalMintable(totalMintable.toNumber());
