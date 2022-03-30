@@ -454,6 +454,9 @@ function App() {
       <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
       <div className='mint-back'>
         <h1 className='title'>Axolotitto Egg🥚 - Presale</h1>
+        <div>
+          <a href={'https://docs.axolotto.xyz/nfts/egg'} target={'_blank'} rel="noreferrer" className='smart-contract'>Get rewards when it hatches!🎁</a>
+        </div>
         {currentAccount ? mintNftButton() : connectWalletButton()}
         {isLive ? (
           <div>
