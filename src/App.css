@@ -7,6 +7,14 @@
     width: 35%;
 }
 
+.discord-icon {
+    width: 25px;
+}
+
+.discord-ann {
+    display: inline-flex;
+}
+
 .title {
     color: white;
 }
@@ -78,6 +86,10 @@
 
 .eggsGrid {
     display: -webkit-inline-box;
+    width: 69%;
+}
+
+.buyGrid {
     width: 69%;
 }
 

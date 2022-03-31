@@ -457,6 +457,11 @@ function App() {
         <div>
           <a href={'https://docs.axolotto.xyz/nfts/egg'} target={'_blank'} rel="noreferrer" className='smart-contract'>Get rewards when it hatches!🎁</a>
         </div>
+        <div className='discord-ann'>
+          <img className='discord-icon' src='https://www.svgrepo.com/show/353655/discord-icon.svg'></img>
+          <a href={'https://discord.gg/JH2EaKY7Ff'} target={'_blank'} rel="noreferrer" className='smart-contract'>GET ONE FREE: Join our Discord, #giveaways channel</a>
+        </div>
+        <br></br>
         {currentAccount ? mintNftButton() : connectWalletButton()}
         {isLive ? (
           <div>
