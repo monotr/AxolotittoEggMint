@@ -282,6 +282,7 @@ function App() {
 
     return (
       <div>
+        <p className='title'>PHASE {eggPrice > 1 ? eggPrice/5 : ''}</p>
         <div className='price-a'>
           <p className='title'>Price per Egg: {eggPrice} MATIC</p><img src='https://s2.coinmarketcap.com/static/img/coins/64x64/3890.png' className='polygon-icon'></img>
         </div>
@@ -451,11 +452,11 @@ function App() {
 
   return (
     <div className='main-app'>
-      <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
+      <a href='https://axolotto.xyz'><img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img></a>
       <div className='mint-back'>
         <h1 className='title'>Axolotitto Egg🥚 - Presale</h1>
         <div>
-          <a href={'https://docs.axolotto.xyz/nfts/egg'} target={'_blank'} rel="noreferrer" className='smart-contract'>Get rewards when it hatches!🎁</a>
+          <a href={'https://docs.axolotto.xyz/nfts/egg'} target={'_blank'} rel="noreferrer" className='smart-contract'>🎁Get rewards when it hatches!</a>
         </div>
         <div className='discord-ann'>
           <img className='discord-icon' src='https://www.svgrepo.com/show/353655/discord-icon.svg'></img>
