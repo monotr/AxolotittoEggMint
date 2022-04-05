@@ -4,7 +4,8 @@ import contract from './contracts/AxolotittoEgg.json';
 import { ethers } from 'ethers';
 import Grid from '@mui/material/Grid';
 import {BrowserView, MobileView} from 'react-device-detect';
-import { useAlert } from 'react-alert'
+import { useAlert } from 'react-alert';
+import  { Navigate } from 'react-router-dom';
 
 const contractAddress = "0x6394f90c3b24004d538975cbd34dc543edb22291";
 const abi = contract.abi;
@@ -439,7 +440,7 @@ function App() {
               <a href='https://metamask.io/download/' target={'_blank'} rel='noreferrer' className='smart-contract' >Install MetaMask</a>
           </BrowserView>
           <MobileView>
-              <a href='https://trustwallet.com/deeplink/' target={'_blank'} rel='noreferrer' className='smart-contract' >Install TrustWallet</a>
+            <Navigate to='https://link.trustwallet.com/open_url?coin_id=966&url=https://presale.axolotto.xyz'/>
           </MobileView>
         </div>
       </div>
