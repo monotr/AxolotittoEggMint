@@ -436,10 +436,23 @@ function App() {
         <img className='logo' src='https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/axolotto_logo.png?alt=media&token=7822f492-48a2-49c6-881a-50fbe3ecf37d'></img>
         <div>
           <BrowserView>
-              <a href='https://metamask.io/download/' target={'_blank'} rel='noreferrer' className='smart-contract' >Install MetaMask</a>
+              <h2 className='title'>Install MetaMask</h2>
+              <a href='https://metamask.io/download/' target={'_blank'} rel='noreferrer' className='smart-contract' >
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png" height={'100px'}></img>
+              </a>
           </BrowserView>
           <MobileView>
-              <a href='https://link.trustwallet.com/open_url?coin_id=966&url=https://presale.axolotto.xyz' target={'_blank'} rel='noreferrer' className='smart-contract' >Go to TrustWallet</a>
+              <h2 className="title">Open with:</h2>
+              <div>
+                <a href='https://metamask.app.link/dapp/presale.axolotto.xyz/' target={'_blank'} rel='noreferrer' className='smart-contract' >
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/MetaMask_Fox.svg/1200px-MetaMask_Fox.svg.png" height={'100px'}></img>
+                </a>
+              </div>
+              <div>
+                <a href='https://link.trustwallet.com/open_url?coin_id=966&url=https://presale.axolotto.xyz' target={'_blank'} rel='noreferrer' className='smart-contract' >
+                  <img src="https://camo.githubusercontent.com/9867493e3fbfe94363795eb74da50bcfe64e96220b0c862956d8b2aa7c5715b7/68747470733a2f2f747275737477616c6c65742e636f6d2f6173736574732f696d616765732f6d656469612f6173736574732f686f72697a6f6e74616c5f626c75652e706e67"  height={'100px'}></img>
+                </a>
+              </div>
           </MobileView>
         </div>
       </div>
