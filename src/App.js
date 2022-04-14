@@ -4,12 +4,14 @@ import contract from './contracts/AxolotittoEgg.json';
 import { ethers } from 'ethers';
 import Grid from '@mui/material/Grid';
 import {BrowserView, MobileView} from 'react-device-detect';
-import { useAlert } from 'react-alert'
+import { useAlert } from 'react-alert';
 
 const contractAddress = "0x6394f90c3b24004d538975cbd34dc543edb22291";
 const abi = contract.abi;
 
-const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mainnet/ws";
+const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/05a4f5d259538b51dff1407a/polygon/mainnet/ws";
+//const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mainnet/ws";
+
 //const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mumbai/ws";
 
 function App() {
@@ -114,7 +116,7 @@ function App() {
         const provider = new ethers.providers.WebSocketProvider(NODE_URL);
         let nftContract = new ethers.Contract(contractAddress, abi, provider);
   
-        addChangeNetwork();
+        //addChangeNetwork();
         let eggPrice = await nftContract.getMintPrice();
         //console.log("eggPrice", eggPrice);
         eggPrice = ethers.utils.formatEther(eggPrice);
@@ -152,6 +154,7 @@ function App() {
     catch (err) {
       console.log(err);
     }
+    console.log("MetaEgg");
   }
 
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -354,14 +357,14 @@ function App() {
 
           let userBalance = await nftContract.balanceOf(account);
           userBalance = userBalance.toNumber();
-          //console.log("userBalance", userBalance);
+          console.log("userBalance", userBalance);
           let eggs = [];
           for (let i = 0; i < userBalance; i++) {
             eggs[i] = await nftContract.tokenOfOwnerByIndex(account, i);
             eggs[i] = eggs[i].toNumber();
             eggs[i] = await nftContract.egg_rarity(eggs[i]);
           }
-          //console.log(eggs);
+          console.log(eggs);
           setMintedEggs(eggs)
           
           // giveaway claimable
@@ -379,10 +382,12 @@ function App() {
 
           //
           let _isPaused = await nftContract.paused();
+          console.log(_isPaused);
           setIsPaused(_isPaused)
 
           //
           let _isLive = await nftContract.isSaleLive();
+          console.log(_isLive);
           setIsLive(_isLive)
         }
       }
