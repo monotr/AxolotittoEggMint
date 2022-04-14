@@ -9,7 +9,7 @@ import { useAlert } from 'react-alert';
 const contractAddress = "0x6394f90c3b24004d538975cbd34dc543edb22291";
 const abi = contract.abi;
 
-const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/05a4f5d259538b51dff1407a/polygon/mainnet/ws";
+const NODE_URL = "wss://hidden-empty-thunder.matic.quiknode.pro/affffe7867e288fbbe23175646953b12ee82bcb4/";
 //const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mainnet/ws";
 
 //const NODE_URL = "wss://speedy-nodes-nyc.moralis.io/99051003b96ed60d2117c8f6/polygon/mumbai/ws";
@@ -154,7 +154,7 @@ function App() {
     catch (err) {
       console.log(err);
     }
-    console.log("MetaEgg");
+    //console.log("MetaEgg");
   }
 
   const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -348,23 +348,45 @@ function App() {
         if (accounts.length !== 0) {
           const account = accounts[0];
 
-          await getEggMeta();
+          //await getEggMeta();
 
           let provider = new ethers.providers.WebSocketProvider(NODE_URL);
           let nftContract = new ethers.Contract(contractAddress, abi, provider);
           
           addChangeNetwork();
 
+          // EGGS
+          let eggPrice = await nftContract.getMintPrice();
+          //console.log("eggPrice", eggPrice);
+          eggPrice = ethers.utils.formatEther(eggPrice);
+          //console.log(eggPrice);
+          setEggPrice(eggPrice);
+
+          //
+          if (eggsMeta.length === 0) {
+            let _eggsMeta = [];
+            _eggsMeta = [
+              "https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/Egg_0_COMMON.gif?alt=media&token=d239a404-88da-4eb7-a05e-ad1da568d8fd",
+              "https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/Egg_1_UNCOMMON.gif?alt=media&token=477a4768-0365-4dd8-a0fa-3cddaaf74b64",
+              "https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/Egg_2_RARE.gif?alt=media&token=0bf2b5f9-9081-44ae-9f82-334d00303f5b",
+              "https://firebasestorage.googleapis.com/v0/b/loteriamexicana.appspot.com/o/Egg_3_ULTRA%20RARE.gif?alt=media&token=eee40cc5-05db-4c9d-b744-ad3e3118b513"
+            ];
+            //console.log(_eggsMeta);
+            setEggsMeta(_eggsMeta);
+          }
+          //console.log("EGGSMETA");
+          // END EGGS
+
           let userBalance = await nftContract.balanceOf(account);
           userBalance = userBalance.toNumber();
-          console.log("userBalance", userBalance);
+          //console.log("userBalance", userBalance);
           let eggs = [];
           for (let i = 0; i < userBalance; i++) {
             eggs[i] = await nftContract.tokenOfOwnerByIndex(account, i);
             eggs[i] = eggs[i].toNumber();
             eggs[i] = await nftContract.egg_rarity(eggs[i]);
           }
-          console.log(eggs);
+          //console.log(eggs);
           setMintedEggs(eggs)
           
           // giveaway claimable
@@ -382,12 +404,12 @@ function App() {
 
           //
           let _isPaused = await nftContract.paused();
-          console.log(_isPaused);
+          //console.log(_isPaused);
           setIsPaused(_isPaused)
 
           //
           let _isLive = await nftContract.isSaleLive();
-          console.log(_isLive);
+          //console.log(_isLive);
           setIsLive(_isLive)
         }
       }
